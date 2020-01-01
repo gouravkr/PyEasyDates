@@ -12,7 +12,6 @@ Parse dates in the order of month, date, and year. It doesn't matter how they ar
 This means that dates like 1012019 will fail to parse as it is not clear whether it is 1st January or 10th January.
 
 ## ymd()
-_yet to be added_
 
 Parse dates in the order of year, month, and date. It doesn't matter how they are written, whether in words or number, and with what separators, if the date can be read by a human, this function should be able to parse it.
 This means that dates like 2019101 will fail to parse as it is not clear whether it is 1st January or 10th January.
