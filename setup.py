@@ -11,7 +11,7 @@ setup(
     name="py_easy_dates",
     version=VERSION,
     author="Gourav Kumar",
-    author_email="mail@gouravkumar.com",
+    author_email="gourav@gvkr.in",
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     packages=find_packages(),
