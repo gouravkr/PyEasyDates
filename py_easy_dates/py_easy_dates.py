@@ -1,8 +1,8 @@
 import datetime
 import warnings
-from typing import Literal
+from typing import Callable, List, Literal, Sequence, Union
 
-from utils import clean_date, strip_day, strip_month
+from .utils import clean_date, strip_day, strip_month
 
 
 def parse_date(date_string: str, format: Literal["dmy", "mdy", "ymd"]) -> datetime.datetime:
@@ -27,12 +27,12 @@ def parse_date(date_string: str, format: Literal["dmy", "mdy", "ymd"]) -> dateti
     date_string = strip_day(clean_date(date_string))
     date_string = strip_month(clean_date(date_string)).replace(" ", "")
 
-    day_pos = format.index("d")
-    month_pos = format.index("m")
-    year_pos = format.index("y")
+    day_pos: int = format.index("d")
+    month_pos: int = format.index("m")
+    year_pos: int = format.index("y")
 
     if len(date_string) == 8:
-        year = date_string[year_pos * 2 : year_pos * 2 + 4]  # noqa
+        year: str = date_string[year_pos * 2 : year_pos * 2 + 4]  # noqa
         date_string = date_string.replace(year, "aa")
 
     if len(date_string) == 6:
@@ -54,16 +54,18 @@ def parse_date(date_string: str, format: Literal["dmy", "mdy", "ymd"]) -> dateti
 def create_func(format):
     """Helper function to create other functions for each supported format"""
 
-    def func(dt_string):
-        if type(dt_string) == str:
-            dates = parse_date(dt_string, format)
+    def func(dates: Union[str, list]) -> Union[datetime.datetime, List[datetime.datetime]]:
+        if isinstance(dates, str):
+            dates = parse_date(dates, format)
+        elif isinstance(dates, Sequence):
+            dates = [parse_date(i, format) for i in dates]
         else:
-            dates = [parse_date(i, format) for i in dt_string]
+            raise TypeError(f"Type not recognised '{dates.__class__.__name__}'")
         return dates
 
     return func
 
 
-dmy = create_func("dmy")
-mdy = create_func("mdy")
-ymd = create_func("ymd")
+dmy: Callable = create_func("dmy")
+mdy: Callable = create_func("mdy")
+ymd: Callable = create_func("ymd")
